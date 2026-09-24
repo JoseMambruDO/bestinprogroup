@@ -1,422 +1,293 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Generador de Firma Outlook - Bestinpro Group</title>
-
-<style>
-    body {
-        margin: 0;
-        padding: 30px;
-        background: #f5f5f5;
-        font-family: Arial, Helvetica, sans-serif;
-    }
-
-    .contenedor {
-        max-width: 850px;
-        margin: auto;
-        background: #ffffff;
-        padding: 25px;
-        border-radius: 8px;
-        box-shadow: 0 2px 10px rgba(0,0,0,.10);
-    }
-
-    h2 {
-        margin-top: 0;
-    }
-
-    .formulario {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr auto;
-        gap: 10px;
-        margin-bottom: 25px;
-    }
-
-    .formulario input {
-        padding: 11px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        font-size: 14px;
-        box-sizing: border-box;
-    }
-
-    .formulario button {
-        padding: 11px 18px;
-        background: #1a55a5;
-        color: white;
-        border: 0;
-        border-radius: 5px;
-        cursor: pointer;
-        font-weight: bold;
-    }
-
-    .formulario button:hover {
-        background: #144481;
-    }
-
-    .firma-container {
-        overflow-x: auto;
-        border-top: 1px solid #ddd;
-        padding-top: 25px;
-    }
-
-    @media (max-width: 800px) {
-        .formulario {
-            grid-template-columns: 1fr;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Firma Outlook - Bestinpro Group</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            padding: 30px;
+            background: #f5f5f5;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #111;
         }
-    }
-</style>
+        .contenedor {
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,.10);
+        }
+        h2 { margin: 0 0 20px; }
+        .formulario {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(180px, 1fr));
+            gap: 12px 14px;
+            margin-bottom: 25px;
+        }
+        .campo-largo { grid-column: span 3; }
+        .formulario input,
+        .formulario select {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        .formulario button {
+            grid-column: 2 / 3;
+            justify-self: center;
+            width: 100%;
+            max-width: 220px;
+            padding: 11px 18px;
+            background: #1a55a5;
+            color: #fff;
+            border: 0;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        .formulario button:hover { background: #144481; }
+        .firma-container {
+            overflow-x: auto;
+            border-top: 1px solid #ddd;
+            padding-top: 25px;
+        }
+        .ayuda {
+            margin: 8px 0 18px;
+            color: #777;
+            font-size: 12px;
+        }
+        @media (max-width: 800px) {
+            .formulario { grid-template-columns: 1fr; }
+            .campo-largo { grid-column: span 1; }
+            .formulario button { grid-column: 1; }
+        }
+    </style>
 </head>
-
 <body>
-
 <div class="contenedor">
-
     <h2>Generador de Firma Outlook</h2>
+    <div class="ayuda">Complete los datos del colaborador.</div>
 
     <div class="formulario">
+        <input type="text" id="nombre" placeholder="Nombre del colaborador">
+        <input type="text" id="cargo" placeholder="Cargo del colaborador">
+        <input type="email" id="correo" placeholder="Correo electrónico">
+        <input type="text" id="flota" placeholder="Flota / móvil">
 
-        <input
-            type="text"
-            id="nombre"
-            placeholder="Nombre del colaborador">
+        <select id="empresa" aria-label="Empresa">
+            <option value="">Seleccione la empresa</option>
+            <option value="BESTINPRO">BESTINPRO</option>
+            <option value="BDS MANAGEMENT">BDS</option>
+            <option value="C2P ENGINEERING">C2P</option>
+            <option value="PORTVILLE CONSTRUCTION INVESTMENTS">PORTVILLE</option>
+            <option value="WOOD KEEPERS">WOOD KEEPERS</option>
+            <option value="VIRBEST">VIRBEST</option>
+        </select>
 
-        <input
-            type="email"
-            id="correo"
-            placeholder="Correo electrónico">
-
-        <input
-            type="text"
-            id="flota"
-            placeholder="Flota">
-
-        <button onclick="generarFirma()">
-            Generar firma
-        </button>
-
+        <button type="button" onclick="generarFirma()">Generar firma</button>
     </div>
 
-
-    <!-- =========================================================
-         FIRMA
-         ========================================================= -->
-
     <div class="firma-container">
-
+        <!--
+            FIRMA: se mantiene con tablas e inline CSS para facilitar su uso en Outlook.
+            El ancho de 780px y la distribución 50/50 siguen la proporción de la pieza Adobe.
+        -->
         <table cellpadding="0" cellspacing="0" border="0" width="780"
-               style="width:780px; border-collapse:collapse; font-family:Arial, Helvetica, sans-serif; color:#111111;">
-
-            <!-- CUERPO PRINCIPAL -->
+               style="width:780px;border-collapse:collapse;font-family:Arial,Helvetica,sans-serif;color:#111;background:#fff;">
             <tr>
-
-                <!-- COLUMNA IZQUIERDA / LOGO -->
+                <!-- BLOQUE IZQUIERDO -->
                 <td width="390" valign="top"
-                    style="width:390px; padding:0 22px 0 10px; border-right:1px solid #222222;">
-
-                    <img src="assets/Firma_Logo_BIP.png"
-                         width="358"
-                         alt="Bestinpro Group Firma Logo"
-                         style="display:block; width:358px; height:auto; border:0;">
-
+                    style="width:390px;padding:0 20px 0 10px;border-right:1px solid #333;">
+                    <img src="assets/Firma_Logo_BIP.png" width="350" alt="Bestinpro Group"
+                         style="display:block;width:350px;max-width:100%;height:auto;border:0;">
                 </td>
 
-
-                <!-- COLUMNA DERECHA / DATOS -->
-                <td width="390" valign="top"
-                    style="width:390px; padding:0 0 0 18px;">
-
-                    <table cellpadding="0" cellspacing="0" border="0" width="100%"
-                           style="border-collapse:collapse;">
-
-                        <!-- NOMBRE -->
+                <!-- BLOQUE DERECHO -->
+                <td width="390" valign="top" style="width:390px;padding:0 0 0 18px;">
+                    <table cellpadding="0" cellspacing="0" border="0" width="100%" style="border-collapse:collapse;">
                         <tr>
-                            <td colspan="4" style="padding:0 0 1px 0;">
-
-                                <div id="firmaNombre"
-                                     style="font-size:25px; line-height:28px; font-weight:bold;">
+                            <td style="padding:0 0 1px 0;">
+                                <div id="firmaNombre" style="font-size:25px;line-height:28px;font-weight:bold;color:#4a4a4a;">
                                     Nombre de Colaborador
                                 </div>
-
                             </td>
                         </tr>
-
-
-                        <!-- EMPRESA -->
                         <tr>
-                            <td colspan="4" style="padding:0 0 1px 0;">
-
-                                <div style="font-size:20px; line-height:24px; color:#8b8b8b;">
+                            <td style="padding:0;">
+                                <div id="firmaEmpresa" style="font-size:20px;line-height:23px;color:#999;">
                                     Bestinpro Group
                                 </div>
-
                             </td>
                         </tr>
-
-
-
-
+                        <tr>
+                            <td style="padding:0 0 8px 0;">
+                                <div id="firmaCargo" style="font-size:17px;line-height:20px;color:#999;">
+                                    Cargo de colaborador
+                                </div>
+                            </td>
+                        </tr>
 
                         <!-- TELÉFONOS -->
                         <tr>
-
-                            <td width="36" valign="middle"
-                                style="width:36px; padding:0 2px 7px 0;">
-
-                                <img src="assets/Icono Phone.webp"
-                                     width="34"
-                                     height="34"
-                                     alt="Teléfono"
-                                     style="display:block; border:0;">
-
+                            <td style="padding:0 0 5px 0;">
+                                <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+                                    <tr>
+                                        <td width="28" valign="middle" style="width:28px;padding:0 5px 0 0;">
+                                            <img src="assets/Icono Phone.webp" width="23" height="23" alt="Teléfono" style="display:block;border:0;">
+                                        </td>
+                                        <td valign="middle" style="padding:0 12px 0 0;font-size:17px;white-space:nowrap;">
+                                            <a id="firmaTelefono1" href="tel:+18099590351" style="color:#4a4a4a;text-decoration:none;">(809) 959-0351</a>
+                                        </td>
+                                        <td width="28" valign="middle" style="width:28px;padding:0 5px 0 0;">
+                                            <img src="assets/Icono Phone.webp" width="23" height="23" alt="Teléfono secundario" style="display:block;border:0;">
+                                        </td>
+                                        <td valign="middle" style="padding:0;font-size:17px;white-space:nowrap;">
+                                            <span id="firmaFlota" style="color:#4a4a4a;">(809) 000-0000</span>
+                                        </td>
+                                    </tr>
+                                </table>
                             </td>
-
-                            <td width="165" valign="middle"
-                                style="width:165px; padding:0 8px 7px 0; font-size:17px; white-space:nowrap;">
-
-                                <a href="tel:+18099590351"
-                                   style="color:#111111; text-decoration:none;">
-
-                                    (809) 959-0351
-
-                                </a>
-
-                            </td>
-
-
-                            <td width="36" valign="middle"
-                                style="width:36px; padding:0 2px 7px 0;">
-
-                                <img src="assets/Icono Phone.webp"
-                                     width="34"
-                                     height="34"
-                                     alt="Teléfono"
-                                     style="display:block; border:0;">
-
-                            </td>
-
-                            <td width="165" valign="middle" style="width:165px; padding:0 8px 7px 0; font-size:17px; white-space:nowrap;">
-
-                                <span id="firmaFlota">
-                                    Flota
-                                </span>
-
-                            </td>
-
                         </tr>
-
 
                         <!-- CORREO -->
                         <tr>
-
-                            <td valign="middle"
-                                style="padding:0 2px 7px 0;">
-
-                                <img src="assets/Icono Correo.webp"
-                                     width="34"
-                                     height="34"
-                                     alt="Correo"
-                                     style="display:block; border:0;">
-
+                            <td style="padding:0 0 5px 0;">
+                                <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+                                    <tr>
+                                        <td width="28" valign="middle" style="width:28px;padding:0 5px 0 0;">
+                                            <img src="assets/Icono Correo.webp" width="23" height="23" alt="Correo" style="display:block;border:0;">
+                                        </td>
+                                        <td valign="middle" style="padding:0;font-size:17px;white-space:nowrap;">
+                                            <a id="firmaCorreo" href="mailto:email@bestinprogroup.com" style="color:#4a4a4a;text-decoration:none;">email@bestinprogroup.com</a>
+                                        </td>
+                                    </tr>
+                                </table>
                             </td>
-
-                            <td colspan="3"
-                                valign="middle"
-                                style="padding:0 0 7px 0; font-size:17px; white-space:nowrap;">
-
-                                <a id="firmaCorreo"
-                                   href="mailto:email@bestinprogroup.com"
-                                   style="color:#1a55a5; text-decoration:underline;">
-
-                                    email@bestinprogroup.com
-
-                                </a>
-
-                            </td>
-
                         </tr>
-
 
                         <!-- WEB -->
                         <tr>
-
-                            <td valign="middle"
-                                style="padding:0 2px 7px 0;">
-
-                                <img src="assets/Icono Web.webp"
-                                     width="34"
-                                     height="34"
-                                     alt="Web"
-                                     style="display:block; border:0;">
-
+                            <td style="padding:0;">
+                                <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+                                    <tr>
+                                        <td width="28" valign="middle" style="width:28px;padding:0 5px 0 0;">
+                                            <img src="assets/Icono Web.webp" width="23" height="23" alt="Web" style="display:block;border:0;">
+                                        </td>
+                                        <td valign="middle" style="padding:0;font-size:17px;white-space:nowrap;">
+                                            <a id="firmaWeb" href="https://www.bestinprogroup.com" style="color:#4a4a4a;text-decoration:none;">www.bestinprogroup.com</a>
+                                        </td>
+                                    </tr>
+                                </table>
                             </td>
-
-                            <td colspan="3"
-                                valign="middle"
-                                style="padding:0 0 7px 0; font-size:17px; white-space:nowrap;">
-
-                                <a href="https://www.bestinprogroup.com"
-                                   style="color:#1a55a5; text-decoration:underline;">
-
-                                    www.bestinprogroup.com
-
-                                </a>
-
-                            </td>
-
                         </tr>
 
-
-                        <!-- REDES SOCIALES -->
+                        <!-- REDES SOCIALES: como en la pieza Adobe, arriba del banner -->
                         <tr>
-
-                            <td colspan="4"
-                                align="right"
-                                style="padding-top:28px; padding-right:8px;">
-
-                                <a href="https://www.instagram.com/bestinpro_group/"
-                                   style="text-decoration:none;">
-
-                                    <img src="assets/Icono Instagram.webp"
-                                         width="38"
-                                         height="38"
-                                         alt="Instagram"
-                                         style="display:inline-block; border:0; margin-left:3px;">
-
+                            <td align="right" style="padding:8px 8px 0 0;">
+                                <a href="https://www.instagram.com/bestinpro_group/" style="text-decoration:none;">
+                                    <img src="assets/Icono Instagram.webp" width="22" height="22" alt="Instagram" style="display:inline-block;border:0;margin-left:3px;">
                                 </a>
-
-
-                                <a href="https://www.linkedin.com/company/bestinpro-group"
-                                   style="text-decoration:none;">
-
-                                    <img src="assets/Icono Linkedin.webp"
-                                         width="38"
-                                         height="38"
-                                         alt="LinkedIn"
-                                         style="display:inline-block; border:0; margin-left:3px;">
-
+                                <a href="https://www.linkedin.com/company/bestinpro-group" style="text-decoration:none;">
+                                    <img src="assets/Icono Linkedin.webp" width="22" height="22" alt="LinkedIn" style="display:inline-block;border:0;margin-left:3px;">
                                 </a>
-
+                                <a href="#" style="text-decoration:none;">
+                                    <img src="assets/Icono YouTube.webp" width="22" height="22" alt="YouTube" style="display:inline-block;border:0;margin-left:3px;">
+                                </a>
                             </td>
-
                         </tr>
-
                     </table>
-
                 </td>
-
             </tr>
 
-
-            <!-- SEPARADOR -->
+            <!-- BANNER FOTOGRÁFICO -->
             <tr>
-
-                <td colspan="2"
-                    style="padding:18px 0 8px 0;">
-
-                    <div style="height:1px; background:#dddddd; line-height:1px; font-size:1px;">
-                        &nbsp;
-                    </div>
-
+                <td colspan="2" style="padding:18px 0 0 0;">
+                    <img src="assets/BIP - Banner GIF.gif" width="780" alt="Bestinpro Group" style="display:block;width:780px;height:auto;border:0;">
                 </td>
-
             </tr>
 
+            <!-- LISTÓN DE LOGOS -->
+            <tr>
+                <td colspan="2" style="padding:6px 0 0 0;">
+                    <img src="assets/BIP - Listón de Logos.png" width="780" alt="Empresas del grupo Bestinpro" style="display:block;width:780px;height:auto;border:0;">
+                </td>
+            </tr>
 
             <!-- DIRECCIÓN -->
             <tr>
-
-                <td colspan="2"
-                    valign="middle"
-                    style="padding:8px 10px 0 10px;">
-
-                    <table cellpadding="0"
-                           cellspacing="0"
-                           border="0"
-                           style="border-collapse:collapse; width:100%;">
-
+                <td colspan="2" style="padding:8px 10px 0 10px;">
+                    <table cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;width:100%;">
                         <tr>
-
-                            <td width="34"
-                                valign="middle"
-                                style="width:34px; padding:0 7px 0 0;">
-
-                                <img src="assets/Icono PIN.png"
-                                     width="28"
-                                     height="28"
-                                     alt="Ubicación"
-                                     style="display:block; width:28px; height:28px; border:0;">
-
+                            <td width="28" valign="middle" style="width:28px;padding:0 5px 0 0;">
+                                <img src="assets/Icono PIN.png" width="20" height="20" alt="Ubicación" style="display:block;width:20px;height:20px;border:0;">
                             </td>
-
-                            <td valign="middle"
-                                style="padding:0; font-size:14px; line-height:18px; color:#333333; white-space:nowrap;">
-
-                                Boulevard 1ro. de Noviembre, Edificio Boulevard,
-                                404 locales 4001–4005, Punta Cana, República Dominicana
-
+                            <td valign="middle" style="padding:0;font-size:12px;line-height:16px;color:#aaa;white-space:nowrap;">
+                                Boulevard 1ro. de Noviembre, Edificio Boulevard, 404 locales 4001–4005, Punta Cana, República Dominicana
                             </td>
-
                         </tr>
-
                     </table>
-
                 </td>
-
             </tr>
 
+            <!-- DISCLAIMER -->
+            <tr>
+                <td colspan="2" style="padding:7px 10px 0 10px;font-size:10px;line-height:13px;color:#aaa;">
+                    The graphic content of this document is the intellectual property of BESTINPRO GROUP. Copyright laws apply.<br>
+                    To read the BESTINPRO GROUP disclaimer click here.
+                </td>
+            </tr>
         </table>
-
     </div>
-
 </div>
 
-
 <script>
+    function generarFirma() {
+        const nombre = document.getElementById('nombre').value.trim();
+        const cargo = document.getElementById('cargo').value.trim();
+        const correo = document.getElementById('correo').value.trim();
+        const flota = document.getElementById('flota').value.trim();
+        const empresa = document.getElementById('empresa').value;
 
-function generarFirma() {
+        if (!nombre) {
+            alert('Debe colocar el nombre del colaborador.');
+            return;
+        }
 
-    // Obtener valores
-    const nombre = document.getElementById("nombre").value.trim();
-    const correo = document.getElementById("correo").value.trim();
-    const flota = document.getElementById("flota").value.trim();
+        if (!cargo) {
+            alert('Debe colocar el cargo del colaborador.');
+            return;
+        }
 
+        if (!correo) {
+            alert('Debe colocar el correo electrónico.');
+            return;
+        }
 
-    // Validar
-    if (nombre === "") {
-        alert("Debe colocar el nombre del colaborador.");
-        return;
+        if (!flota) {
+            alert('Debe colocar la flota o móvil.');
+            return;
+        }
+
+        if (!empresa) {
+            alert('Debe seleccionar la empresa.');
+            return;
+        }
+
+        // ÚNICOS CAMPOS DINÁMICOS
+        document.getElementById('firmaNombre').textContent = nombre;
+        document.getElementById('firmaCargo').textContent = cargo;
+        document.getElementById('firmaFlota').textContent = flota;
+        document.getElementById('firmaEmpresa').textContent = empresa;
+
+        const enlaceCorreo = document.getElementById('firmaCorreo');
+        enlaceCorreo.textContent = correo;
+        enlaceCorreo.href = 'mailto:' + correo;
     }
-
-    if (correo === "") {
-        alert("Debe colocar el correo electrónico.");
-        return;
-    }
-
-    if (flota === "") {
-        alert("Debe colocar la flota.");
-        return;
-    }
-
-
-    // Actualizar nombre
-    document.getElementById("firmaNombre").textContent = nombre;
-
-
-    // Actualizar flota
-    document.getElementById("firmaFlota").textContent = flota;
-
-
-    // Actualizar correo
-    const enlaceCorreo = document.getElementById("firmaCorreo");
-
-    enlaceCorreo.textContent = correo;
-    enlaceCorreo.href = "mailto:" + correo;
-
-}
-
 </script>
-
 </body>
 </html>
-
